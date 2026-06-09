@@ -1,0 +1,250 @@
+{
+  "info": {
+    "_postman_id": "alertas-medicas-cn1-2026",
+    "name": "Alertas Médicas CN1 — BFF Completo",
+    "description": "Colección completa para probar todos los endpoints del BFF.\n\nAntes de usar:\n1. Inicia sesión en http://localhost:4200\n2. Abre DevTools → Application → Local Storage → copia el id_token\n3. Pega el token en la variable 'jwt' de esta colección\n\nEl BFF corre en http://localhost:8080",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080/api",
+      "type": "string"
+    },
+    {
+      "key": "jwt",
+      "value": "PEGA_AQUI_EL_ID_TOKEN_DE_AZURE_B2C",
+      "type": "string"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{jwt}}", "type": "string" }]
+  },
+  "item": [
+    {
+      "name": "Health (público)",
+      "item": [
+        {
+          "name": "GET /health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/health", "host": ["{{baseUrl}}"], "path": ["health"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Usuario autenticado",
+      "item": [
+        {
+          "name": "GET /user — perfil JWT",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{jwt}}", "type": "string" }] },
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/user", "host": ["{{baseUrl}}"], "path": ["user"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pacientes",
+      "item": [
+        {
+          "name": "GET /pacientes — listar todos",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{jwt}}", "type": "string" }] },
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/pacientes", "host": ["{{baseUrl}}"], "path": ["pacientes"] }
+          }
+        },
+        {
+          "name": "GET /pacientes/activos",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{jwt}}", "type": "string" }] },
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/pacientes/activos", "host": ["{{baseUrl}}"], "path": ["pacientes", "activos"] }
+          }
+        },
+        {
+          "name": "GET /pacientes/{id}",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{jwt}}", "type": "string" }] },
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/pacientes/1", "host": ["{{baseUrl}}"], "path": ["pacientes", "1"] }
+          }
+        },
+        {
+          "name": "POST /pacientes — crear",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{jwt}}", "type": "string" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"María\",\n  \"apellido\": \"González\",\n  \"rut\": \"11111111-1\",\n  \"fechaNacimiento\": \"1985-06-15\",\n  \"habitacion\": \"UCI-02\",\n  \"diagnostico\": \"Paciente con insuficiencia cardíaca en observación\",\n  \"estado\": \"ACTIVO\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/pacientes", "host": ["{{baseUrl}}"], "path": ["pacientes"] }
+          }
+        },
+        {
+          "name": "PUT /pacientes/{id} — actualizar",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{jwt}}", "type": "string" }] },
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"María\",\n  \"apellido\": \"González\",\n  \"rut\": \"11111111-1\",\n  \"habitacion\": \"UCI-03\",\n  \"diagnostico\": \"Diagnóstico actualizado\",\n  \"estado\": \"ACTIVO\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/pacientes/1", "host": ["{{baseUrl}}"], "path": ["pacientes", "1"] }
+          }
+        },
+        {
+          "name": "DELETE /pacientes/{id}",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{jwt}}", "type": "string" }] },
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/pacientes/1", "host": ["{{baseUrl}}"], "path": ["pacientes", "1"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Señales Vitales",
+      "item": [
+        {
+          "name": "GET /signals — listar todas",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{jwt}}", "type": "string" }] },
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/signals", "host": ["{{baseUrl}}"], "path": ["signals"] }
+          }
+        },
+        {
+          "name": "GET /signals/criticas",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{jwt}}", "type": "string" }] },
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/signals/criticas", "host": ["{{baseUrl}}"], "path": ["signals", "criticas"] }
+          }
+        },
+        {
+          "name": "GET /signals/paciente/{id}",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{jwt}}", "type": "string" }] },
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/signals/paciente/1", "host": ["{{baseUrl}}"], "path": ["signals", "paciente", "1"] }
+          }
+        },
+        {
+          "name": "POST /signals/paciente/{id} — registrar (valores normales)",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{jwt}}", "type": "string" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"frecuenciaCardiaca\": 80,\n  \"presionSistolica\": 120,\n  \"presionDiastolica\": 80,\n  \"temperatura\": 36.8,\n  \"saturacionOxigeno\": 98,\n  \"frecuenciaRespiratoria\": 16\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/signals/paciente/1", "host": ["{{baseUrl}}"], "path": ["signals", "paciente", "1"] }
+          }
+        },
+        {
+          "name": "POST /signals/paciente/{id} — registrar (valores CRÍTICOS ⚠️)",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{jwt}}", "type": "string" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"frecuenciaCardiaca\": 165,\n  \"presionSistolica\": 190,\n  \"presionDiastolica\": 110,\n  \"temperatura\": 40.2,\n  \"saturacionOxigeno\": 85,\n  \"frecuenciaRespiratoria\": 35\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/signals/paciente/1", "host": ["{{baseUrl}}"], "path": ["signals", "paciente", "1"] }
+          }
+        },
+        {
+          "name": "DELETE /signals/{id}",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{jwt}}", "type": "string" }] },
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/signals/1", "host": ["{{baseUrl}}"], "path": ["signals", "1"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Alertas",
+      "item": [
+        {
+          "name": "GET /alertas — listar todas",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{jwt}}", "type": "string" }] },
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/alertas", "host": ["{{baseUrl}}"], "path": ["alertas"] }
+          }
+        },
+        {
+          "name": "GET /alertas/activas",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{jwt}}", "type": "string" }] },
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/alertas/activas", "host": ["{{baseUrl}}"], "path": ["alertas", "activas"] }
+          }
+        },
+        {
+          "name": "GET /alertas/paciente/{id}",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{jwt}}", "type": "string" }] },
+            "method": "GET",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/alertas/paciente/1", "host": ["{{baseUrl}}"], "path": ["alertas", "paciente", "1"] }
+          }
+        },
+        {
+          "name": "POST /alertas/paciente/{id} — crear alerta manual",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{jwt}}", "type": "string" }] },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipo\": \"PRESION_ARTERIAL\",\n  \"descripcion\": \"Presión arterial elevada detectada manualmente\",\n  \"severidad\": \"ALTA\",\n  \"estado\": \"ACTIVA\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/alertas/paciente/1", "host": ["{{baseUrl}}"], "path": ["alertas", "paciente", "1"] }
+          }
+        },
+        {
+          "name": "PUT /alertas/{id}/atender — marcar atendida",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{jwt}}", "type": "string" }] },
+            "method": "PUT",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/alertas/1/atender", "host": ["{{baseUrl}}"], "path": ["alertas", "1", "atender"] }
+          }
+        },
+        {
+          "name": "DELETE /alertas/{id}",
+          "request": {
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{jwt}}", "type": "string" }] },
+            "method": "DELETE",
+            "header": [],
+            "url": { "raw": "{{baseUrl}}/alertas/1", "host": ["{{baseUrl}}"], "path": ["alertas", "1"] }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+
+  alertas-ms:
+    build: ./alertas-ms
+    container_name: alertas-ms
+    restart: unless-stopped
+    expose:
+      - "8081"
+    environment:
+      SERVER_PORT: 8081
+      SPRING_DATASOURCE_URL: jdbc:oracle:thin:@bbdd2026_tp?TNS_ADMIN=/app/wallet
+      SPRING_DATASOURCE_USERNAME: ADMIN
+      SPRING_DATASOURCE_PASSWORD: BBDD_2026_ids
+      JPA_DDL_AUTO: update
+      JPA_SHOW_SQL: "false"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8081/actuator/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    networks:
+      - hospital-net
+
+  alertas-bff:
+    build: ./alertas-bff
+    container_name: alertas-bff
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    depends_on:
+      alertas-ms:
+        condition: service_healthy
+    environment:
+      SERVER_PORT: 8080
+      MS_ALERTAS_URL: http://alertas-ms:8081
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: https://cn01duoc2026.b2clogin.com/18dffa37-dc2c-4aac-a322-05bbe323a686/discovery/v2.0/keys?p=B2C_1_cn1_login
+      AZURE_AD_B2C_CLIENT_ID: 7103a40c-5cf9-42dd-afb9-0a6811a014ef
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/api/health || exit 1"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+    networks:
+      - hospital-net
+
+  frontend-alertas:
+    build: ./frontend-alertas
+    container_name: frontend-alertas
+    restart: unless-stopped
+    ports:
+      - "4200:80"
+    depends_on:
+      alertas-bff:
+        condition: service_healthy
+    networks:
+      - hospital-net
+
+networks:
+  hospital-net:
+    driver: bridge

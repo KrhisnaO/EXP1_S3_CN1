@@ -1,0 +1,22 @@
+<nav class="topbar">
+  <a class="brand" routerLink="/">
+    <span class="brand-icon">✚</span>
+    <span>{{ title }}</span>
+  </a>
+
+  <div class="spacer"></div>
+
+  @if (loginDisplay) {
+    <a class="nav-link" routerLink="/">Alertas</a>
+    <a class="nav-link" routerLink="/profile">Mi perfil</a>
+    <button class="btn-outline" (click)="logout()">Cerrar sesión</button>
+  } @else {
+    <button class="btn-primary" (click)="login()">Iniciar sesión </button>
+  }
+</nav>
+
+<main class="container">
+  @if (!isIframe) {
+    <router-outlet></router-outlet>
+  }
+</main>

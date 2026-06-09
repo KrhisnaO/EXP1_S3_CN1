@@ -1,0 +1,5 @@
+/* Estilos específicos del HomeComponent (globales en styles.css) */
+form button[type="submit"] {
+  margin-top: 12px;
+  width: 100%;
+}
